@@ -4,8 +4,11 @@ from typing import List
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi import HTTPException
+
 from motor.motor_asyncio import AsyncIOMotorClient
 from starlette import status
+
 
 from whiskies_api.models.whisky import (
     Whisky, PyObjectId, )
@@ -66,7 +69,6 @@ async def get_whisky(whisky_id: str):
     raise HTTPException(status_code=404, detail="Whisky not found")
 
 
-from fastapi import HTTPException
 
 
 @app.post("/whiskies/", response_model=Whisky, status_code=status.HTTP_201_CREATED)
