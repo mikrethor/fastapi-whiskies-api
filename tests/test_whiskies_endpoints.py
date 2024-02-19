@@ -64,8 +64,8 @@ def prepare_db(db_client):
         Whisky.model_validate(item)
 
 
-def test_get_all_whiskies(client):
-    response = client.get("/test/")
+def test_hello(client):
+    response = client.get("/hello/")
 
     assert response.status_code == 200
     assert isinstance(response, str)
