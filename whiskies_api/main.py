@@ -19,21 +19,12 @@ logger = logging.getLogger(__name__)
 
 async def connect_to_mongo():
     global client
-    client = AsyncIOMotorClient(get_connection_string())
+    client = AsyncIOMotorClient(os.getenv('MONGO_CONNECTION_STRING', 'mongodb://localhost:27017/'))
     app.mongodb = client['whiskies']
 
 
 async def close_mongo_connection():
     client.close()
-
-
-def get_connection_string():
-    return os.getenv('MONGO_CONNECTION_STRING', 'mongodb://localhost:27017/')
-
-
-def get_database(connection_string=get_connection_string()):
-    client = AsyncIOMotorClient(connection_string)
-    return client.whiskies
 
 
 # fast API - handling events

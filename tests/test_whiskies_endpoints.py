@@ -1,16 +1,14 @@
 import asyncio
-import json
 import logging
 import os
 
 import pytest
-from fastapi import HTTPException
 from fastapi.testclient import TestClient
 from motor.motor_asyncio import AsyncIOMotorClient
 from testcontainers.mongodb import MongoDbContainer
 
-from whiskies_api.main import app, get_database, get_connection_string
-from whiskies_api.models.whisky import Whisky, PyObjectId
+from whiskies_api.main import app
+from whiskies_api.models.whisky import Whisky
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -44,7 +42,7 @@ def client(set_env_vars):
         yield test_client
 
 
-def get_database_override(connection_string=get_connection_string()):
+def get_database(connection_string):
     client = AsyncIOMotorClient(connection_string)
     return client.whiskies
 
@@ -135,20 +133,10 @@ def test_delete_whisky(client):
     assert response.status_code == 201
 
     whisky_to_be_deleted = Whisky.parse_obj(response.json())
-    # Envoyer une requête DELETE pour supprimer le whisky
 
-
-    # Convertir la chaîne en ObjectId pour la requête MongoDB
     _id = str(whisky_to_be_deleted.id)
-
 
     response = client.delete(f"/whiskies/{_id}")
 
     # Vérifier que le code de statut HTTP est 204
     assert response.status_code == 204
-
-    # [Optionnel] Vérifier que le whisky a bien été supprimé de la base de données
-    # Cela nécessite d'avoir accès à la base de données dans le contexte de test
-    # db_client devrait être une fixture qui fournit un accès à la base de données pour les tests
-    # whisky = await db_client["whiskies"].find_one({"_id": whisky_to_be_deleted.id})
-    # assert whisky is None
