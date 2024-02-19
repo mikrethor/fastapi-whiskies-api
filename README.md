@@ -1,1 +1,0 @@
-== Project for my demo at confoo 2024
