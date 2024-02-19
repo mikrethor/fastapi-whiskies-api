@@ -38,7 +38,7 @@ async def shutdown_event():
     await close_mongo_connection()
 
 
-@app.get("/test", response_model=str)
+@app.get("/hello", response_model=str)
 async def get_test():
     logger.info("Calling get_test()...")
     return "Hello Confoo!!!"
@@ -107,4 +107,4 @@ async def delete_whisky(id: str):
 
 def start():
     """Launched with `poetry run start` at root level"""
-    uvicorn.run("whiskies_api.main:app", host="0.0.0.0", port=8000, reload=False)
+    uvicorn.run("whiskies_api.main:app", host="0.0.0.0", port=8000, reload=True)

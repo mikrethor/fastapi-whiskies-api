@@ -140,3 +140,12 @@ def test_delete_whisky(client):
 
     # Vérifier que le code de statut HTTP est 204
     assert response.status_code == 204
+
+
+def test_hello(client):
+    response = client.get("/hello")
+
+    assert response.status_code == 200
+    response_data = response.json()
+    assert isinstance(response_data, str)
+    assert response_data == "Hello Confoo!!!"
